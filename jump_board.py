@@ -1,3 +1,15 @@
+# You're given a board game which is a row of squares, each labeled with an integer.
+# This can be represented by a list, e.g.
+# [1, 3, 2, 0, 5, 2, 8, 4, 1]
+#
+# Given a start position on the board, you "win" by landing on a zero, where you move
+# by jumping from square to square either left or right the number of spaces specified
+# on the square you're currently on.
+#
+# Your task is to implement the function:
+#
+# def can_win(board, pos): returns True if you can win the board from that starting pos, False otherwise
+
 from random import randint
 
 def make_board(board_size):
@@ -23,6 +35,11 @@ def solve_board(board):
         #print spare_squares
     return spare_squares
 
-board = make_board(100)
+def can_win(board, pos):
+    winners = solve_board(board)
+    return pos in winners
+
+board = make_board(30)
 print board
 print solve_board(board)
+print can_win(board, 12)
