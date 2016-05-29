@@ -38,14 +38,28 @@ def deserialize(some_list):
 aa = BinaryTree(1)
 aa.insert_left_child(2)
 aa.insert_right_child(3)
+aa.get_left_child().insert_left_child(6)
+aa.get_left_child().insert_right_child(7)
 aa.get_right_child().insert_left_child(4)
 aa.get_right_child().insert_right_child(5)
-print 'original'
-aa.print_tree()
-ss = serialize(aa)
-print 'serialized'
-print ss
-bb = deserialize(ss)
-bb.clean_tree()
-print 'deserialized'
-bb.print_tree()
+aa.get_right_child().get_left_child().insert_left_child(8)
+aa.get_right_child().get_left_child().insert_right_child(9)
+aa.get_left_child().get_right_child().insert_left_child(10)
+aa.get_left_child().get_right_child().insert_right_child(11)
+print 'original in order'
+aa.print_tree_in_order()
+print 'original pre order'
+aa.print_tree_pre_order()
+print 'original post order'
+aa.print_tree_post_order()
+print 'original level order'
+aa.print_tree_level_order()
+print 'original zigzag order'
+aa.print_tree_zigzag_order()
+# ss = serialize(aa)
+# print 'serialized'
+# print ss
+# bb = deserialize(ss)
+# bb.clean_tree()
+# print 'deserialized'
+# bb.print_tree()
