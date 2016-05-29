@@ -71,11 +71,11 @@ class BinaryTree():
                 q.enqueue(current_node.get_right_child())
 
     def print_tree_zigzag_order(self):
-        q_zigzag = []
-        q_zigzag.append([self])
+        q_zigzag = Queue()
+        q_zigzag.enqueue([self])
         direction = 1
-        while len(q_zigzag) > 0:
-            current_arr = q_zigzag.pop(0)
+        while not q_zigzag.is_empty():
+            current_arr = q_zigzag.dequeue()
             if direction == 1:
                 for i in current_arr:
                     print i.get_root()
@@ -92,7 +92,7 @@ class BinaryTree():
                 if node.get_right_child():
                     children.append(node.get_right_child())
             if len(children) > 0:
-                q_zigzag.append(children)
+                q_zigzag.enqueue(children)
 
     def clean_tree(self):
         if self.key == -1:
