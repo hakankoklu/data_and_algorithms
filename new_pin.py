@@ -33,7 +33,7 @@ class TreeNode():
         self.right = None
         self.parent = None
 
-     def set_left_child(self, ll):
+    def set_left_child(self, ll):
         self.left = ll
         ll.set_parent(self)
 
@@ -89,6 +89,7 @@ def get_path_to_root(node):
     while parent is not None:
         nodes.append(parent)
         parent = parent.parent
+    return nodes
 
 
 def get_path(node1, node2):
@@ -98,7 +99,10 @@ def get_path(node1, node2):
     while parent not in node1_root_path:
         node2_list.append(parent)
         parent = parent.parent
-    return node1_root_path[:node1_root_path.index(parent) + 1].extend(node2_list.reverse())
+    node2_list.reverse()
+    path = node1_root_path[:node1_root_path.index(parent) + 1]
+    path.extend(node2_list)
+    return path
 
 
 def calculate_sum(node_list):
@@ -108,5 +112,19 @@ def calculate_sum(node_list):
 def get_max(root):
     node_list = turn_tree_to_list(root)
     all_pairs = get_all_pairs(node_list)
-    all_paths = [get_path(pair) for pair in all_pairs]
+    all_paths = [get_path(*pair) for pair in all_pairs]
     return max([calculate_sum(path) for path in all_paths])
+
+node_5 = TreeNode(-5)
+node_3 = TreeNode(-3)
+node5 = TreeNode(5)
+node5.set_left_child(node_3)
+node5.set_right_child(node_5)
+node4 = TreeNode(4)
+node2 = TreeNode(2)
+node2.set_left_child(node5)
+node2.set_right_child(node4)
+node_1 = TreeNode(-1)
+node3 = TreeNode(3)
+node3.set_left_child(node2)
+node3.set_right_child(node_1)
