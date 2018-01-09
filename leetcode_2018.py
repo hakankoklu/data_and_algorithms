@@ -106,7 +106,7 @@ class ListNode:
         self.next = None
 
 
-def add_two_tumbers(l1, l2):
+def add_two_numbers(l1, l2):
     """
     :type l1: ListNode
     :type l2: ListNode
@@ -132,3 +132,39 @@ def add_two_tumbers(l1, l2):
     temp.val = co
     prev.next = None if not co else temp
     return r
+
+
+def valid_parenthesis(s):
+    """
+    :type s: str
+    :rtype: bool
+    """
+    parens = []
+    pairs = {')': '(', ']': '[', '}': '{'}
+    for ch in s:
+        if ch in pairs and (not parens or pairs[ch] != parens[-1]):
+            return False
+        elif ch in pairs and pairs[ch] == parens[-1]:
+            parens.pop()
+        else:
+            parens.append(ch)
+    if parens:
+        return False
+    return True
+
+
+def remove_duplicates(nums):
+    """
+    :type nums: List[int]
+    :rtype: int
+    """
+    if len(nums) <= 1:
+        return len(nums)
+    prev = nums[0]
+    prev_pt = 0
+    for i, num in enumerate(nums[1:], 1):
+        if num != prev:
+            prev_pt += 1
+            nums[prev_pt] = num
+            prev = num
+    return prev_pt + 1, nums
