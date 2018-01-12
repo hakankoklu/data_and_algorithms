@@ -168,3 +168,57 @@ def remove_duplicates(nums):
             nums[prev_pt] = num
             prev = num
     return prev_pt + 1, nums
+
+
+def length_of_longest_non_repeating_substring(s):
+    """
+    :type s: str
+    :rtype: int
+    """
+    used_chars = {}
+    head = max_len = 0
+    for i, ch in enumerate(s):
+        if ch in used_chars and head <= used_chars[ch]:
+            head = used_chars[ch] + 1
+        else:
+            max_len = max(max_len, i - head + 1)
+        used_chars[ch] = i
+    return max_len
+
+
+pals = set([''])
+def is_pal(s):
+    if len(s) <= 1:
+        pals.add(s)
+        return True
+    if len(s) == 2 and s[0] == s[1]:
+        pals.add(s)
+        return True
+    if s[0] == s[-1] and (s[1:-1] in pals or is_pal(s[1:-1])):
+        pals.add(s)
+        return True
+    return False
+
+
+def longest_palindromic_substring(s):
+    """
+    :type s: str
+    :rtype: str
+    """
+    max_pal = ''
+    for pal_len in range(1, len(s) + 1):
+        for i in range(len(s) - pal_len + 1):
+            if s[i:i + pal_len] != max_pal and is_pal(s[i:i + pal_len]):
+                max_pal = s[i:i + pal_len]
+    return max_pal
+
+
+def plus_one(digits):
+    """
+    :type digits: List[int]
+    :rtype: List[int]
+    """
+    digits = [str(x) for x in digits]
+    num = int(''.join(digits))
+    num += 1
+    return [int(x) for x in str(num)]
