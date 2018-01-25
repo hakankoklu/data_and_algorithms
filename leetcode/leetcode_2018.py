@@ -435,6 +435,24 @@ def my_pow(x, n):
     return res
 
 
+def my_pow_dp(x, n):
+    pow_cache = {0: 1, 1: x}
+    def my_pow_in(x, n):
+        if n in pow_cache:
+            return pow_cache[n]
+        if n % 2 == 0:
+            base = my_pow_in(x, n / 2)
+            result = base  * base
+            pow_cache[n] = result
+            return result
+        else:
+            base = my_pow_in(x, n / 2)
+            result = base  * base * x
+            pow_cache[n] = result
+            return result
+    return my_pow_in(x, n)
+
+
 def get_perms(nums):
     if len(nums) == 0:
         return []
@@ -463,4 +481,119 @@ def next_permutation_full_brute(nums):
 
 
 def next_permutation_in_place(nums):
-    
+    prev = nums[0]
+    ordered = True
+    for num in nums[1:]:
+        if num > prev:
+            ordered = False
+            break
+        prev = num
+    if ordered:
+        nums.reverse()
+    else:
+        prev = nums[-1]
+        for ind in range(len(nums) - 2, -1, -1):
+            if prev > nums[ind]:
+                break
+            prev = nums[ind]
+        temp = nums[ind]
+        target_ind = get_next_bigger_digit(nums, ind)
+        nums[ind] = nums[target_ind]
+        nums[target_ind] = temp
+        sub = nums[ind+1:]
+        sub.sort()
+        nums[ind + 1:] = sub
+
+
+def get_next_bigger_digit(nums, ind):
+    target = nums[ind]
+    res = 10
+    res_ind = 0
+    for i_ind, i in enumerate(nums[ind + 1:], ind + 1):
+        if i > target and i < res:
+            res = i
+            res_ind = i_ind
+    return res_ind
+
+
+def spiral_order(matrix):
+    if not matrix:
+        return []
+    start = [0, 0]
+    direction = 'r'
+    row_lims = [0, len(matrix) - 1]
+    col_lims = [0, len(matrix[0]) - 1]
+    total = (row_lims[1] + 1) * (col_lims[1] + 1)
+    print(total)
+    count = 0
+    res = []
+    while count < total:
+        if direction == 'r':
+            for i in range(col_lims[0], col_lims[1] + 1):
+                res.append(matrix[row_lims[0]][i])
+                count += 1
+            row_lims[0] += 1
+            direction = 'd'
+        elif direction == 'd':
+            for i in range(row_lims[0], row_lims[1] + 1):
+                res.append(matrix[i][col_lims[1]])
+                count += 1
+            col_lims[1] -= 1
+            direction = 'l'
+        elif direction == 'l':
+            for i in range(col_lims[1], col_lims[0] - 1, -1):
+                res.append(matrix[row_lims[1]][i])
+                count += 1
+            row_lims[1] -= 1
+            direction = 'u'
+        elif direction == 'u':
+            for i in range(row_lims[1], row_lims[0] - 1, -1):
+                res.append(matrix[i][col_lims[0]])
+                count += 1
+            col_lims[0] += 1
+            direction = 'r'
+        print(res)
+    return res
+
+
+class Interval(object):
+    def __init__(self, s=0, e=0):
+        self.start = s
+        self.end = e
+
+
+def merge_intervals(intervals):
+    intervals = sorted(intervals, key=lambda x: x.start)
+    if len(intervals) == 0:
+        return []
+    elif len(intervals) == 1:
+        return intervals
+    result = [intervals[0]]
+    for interval in intervals[1:]:
+        if interval.start <= result[-1].end:
+            temp = Interval(result[-1].start, max(interval.end, result[-1].end))
+            result[-1] = temp
+        else:
+            result.append(interval)
+    return result
+
+
+def word_break(s, word_list):
+    matches = [x for x in word_list if s.startswith(x)]
+    if not matches:
+        return False
+    if matches[0] == s:
+        return True
+    return any([word_break(s[len(x):], word_list) for x in matches])
+
+
+def find_peak_element_n(nums):
+    if len(nums) == 1:
+        return nums[0]
+    for i in range(len(nums)):
+        if i == 0 and if nums[i] > nums[i + 1]:
+            return nums[i]
+        if i == (len(nums) - 1) and if nums[i] > nums[i - 1]:
+            return nums[i]
+        if nums[i] > nums[i - 1] and nums[i] > nums[i + 1]:
+            return nums[i]
