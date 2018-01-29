@@ -589,11 +589,73 @@ def word_break(s, word_list):
 
 def find_peak_element_n(nums):
     if len(nums) == 1:
-        return nums[0]
+        return 0
     for i in range(len(nums)):
-        if i == 0 and if nums[i] > nums[i + 1]:
-            return nums[i]
-        if i == (len(nums) - 1) and if nums[i] > nums[i - 1]:
-            return nums[i]
+        if i == 0 and nums[i] > nums[i + 1]:
+            return i
+        if i == (len(nums) - 1) and nums[i] > nums[i - 1]:
+            return i
         if nums[i] > nums[i - 1] and nums[i] > nums[i + 1]:
-            return nums[i]
+            return i
+
+
+def find_peak_element_logn(nums):
+    if len(nums) == 1:
+        return 0
+    if nums[0] > nums[1]:
+        return 0
+    if nums[-1] > nums[-2]:
+        return len(nums) - 1
+    start = 0
+    end = len(nums) - 1
+    med = (start + end) // 2
+    while True:
+        if nums[med] > nums[med - 1] and nums[med] > nums[med + 1]:
+            return med
+        if nums[med + 1] > nums[med]:
+            start = med
+        elif nums[med - 1] > nums[med]:
+            end = med
+        med = (start + end) // 2
+
+
+def fraction_to_decimal(numerator, denominator):
+    if numerator == 0:
+        return '0'
+    positive = (numerator == abs(numerator)) == (denominator == abs(denominator))
+    numerator = abs(numerator)
+    denominator = abs(denominator)
+    digits = []
+    nums = {numerator: 0}
+    digits.append(numerator // denominator)
+    remainder = numerator % denominator
+    count = 0
+    repeat = -1
+    while remainder != 0:
+        count += 1
+        numerator = remainder * 10
+        if numerator in nums:
+            repeat = nums[numerator]
+            break
+        digits.append(numerator // denominator)
+        remainder = numerator % denominator
+        nums[numerator] = count
+    if len(digits) == 1:
+        if positive:
+            return str(digits[0])
+        return '-' + str(digits[0])
+    if repeat == -1:
+        if positive:
+            return str(digits[0]) + '.' + ''.join([str(x) for x in digits[1:]])
+        return '-' + str(digits[0]) + '.' + ''.join([str(x) for x in digits[1:]])
+    repeat_str = '(' + ''.join([str(x) for x in digits[repeat:]]) + ')'
+    if positive:
+        return str(digits[0]) + '.' + ''.join([str(x) for x in digits[1:repeat]]) + repeat_str
+    return '-' + str(digits[0]) + '.' + ''.join([str(x) for x in digits[1:repeat]]) + repeat_str
+
+
+def hamming_distance(x, y):
+    # xxory = x ^ y
+    # bxor = bin(xxory)
+    # return sum([int(x) for x in bxor[2:]])
+    return bin(x^y).count('1')
