@@ -659,3 +659,361 @@ def hamming_distance(x, y):
     # bxor = bin(xxory)
     # return sum([int(x) for x in bxor[2:]])
     return bin(x^y).count('1')
+
+
+def reverse_linked_list(head):
+    """
+    :type head: ListNode
+    :rtype: ListNode
+    """
+    if not head:
+        return None
+    n = head
+    nodes = [n]
+    while n.next:
+        nodes.append(n.next)
+        n = n.next
+    head = nodes[-1]
+    prev = head
+    for node in reversed(nodes[:-1]):
+        prev.next = node
+        prev = node
+    prev.next = None
+    return head
+
+
+def move_zeroes(nums):
+    z_count = nums.count(0)
+    if not z_count:
+        return
+    pt = 0
+    for ind, num in enumerate(nums):
+        if num != 0:
+            nums[pt] = num
+            pt += 1
+    nums[pt:] = [0] * z_count
+
+
+
+def count_nums(seq):
+    if len(seq) == 1:
+        return str(1) + str(seq[0])
+    res = ''
+    start = 0
+    prev = seq[0]
+    for i, s in enumerate(seq[1:], 1):
+        if s != prev:
+            res += str(i - start)
+            res += str(prev)
+            start = i
+            prev = s
+    res += str(i - start + 1)
+    res += str(s)
+    return res
+
+
+def count_and_say(n):
+    res = '1'
+    for i in range(n-1):
+        res = count_nums(res)
+    return res
+
+
+def max_profit(prices):
+    if len(prices) <= 1:
+        return 0
+    profit = 0
+    base = prices[0]
+    for price in prices[1:]:
+        profit = max(profit, price - base)
+        base = min(base, price)
+    return profit
+
+
+def add_binary(a, b):
+    c = str(int(a) + int(b))
+    car = 0
+    res = []
+    for i in reversed(list(c)):
+        digit = (int(i) + car) % 2
+        car = (int(i) + car) // 2
+        res.append(digit)
+    if car:
+        res.append(car)
+    res.reverse()
+    return ''.join([str(x) for x in res])
+
+
+def str_str(haystack, needle):
+    if haystack == needle or needle == '':
+        return 0
+    for i, hay in enumerate(haystacks):
+        if i + len(needle) > len(haystack):
+            break
+        if hay == needle[0]:
+            match = True
+            for j, let in enumerate(needle):
+                if let != haystack[i + j]:
+                    match = False
+                    break
+            if match:
+                return i
+    return -1
+
+
+def is_palindrome(s):
+    if len(s) <= 1:
+        return True
+    s = s.lower()
+    valids = 'qwertyuiopasdfghjklzxcvbnm1234567890'
+    lets = []
+    for let in s:
+        if let in valids:
+            lets.append(let)
+    if len(lets) <= 1:
+        return True
+    # return lets == list(reversed(lets))
+    left = 0
+    right = len(lets) - 1
+    while left < right:
+        if lets[left] != lets[right]:
+            return False
+        left += 1
+        right -= 1
+    return True
+
+
+def is_palindrome_linked(head):
+    if not head or not head.next:
+        return True
+    length = 1
+    top = head
+    while top.next:
+        length += 1
+        top = top.next
+    if length == 2:
+        return head.val == head.next.val
+    elif length == 3:
+        return head.val == head.next.next.val
+    prev = head
+    future = prev.next
+    prev.next = None
+    for i in range(length // 2 - 1):
+        temp = future.next
+        future.next = prev
+        prev = future
+        future = temp
+    if length % 2 == 1:
+        future = future.next
+    while prev:
+        if prev.val != future.val:
+            return False
+        prev = prev.next
+        future = future.next
+    return True
+
+
+def merge_sorted_arrays_inp(nums1, m, nums2, n):
+    m = len(nums1)
+    n = len(nums2)
+    if not nums2:
+        return
+    for i in range(n):
+        nums1.append(-10000000)
+    c1 = m - 1
+    c2 = n - 1
+    for i in range(m+n-1, -1, -1):
+        if nums1[c1] >= nums2[c2]:
+            nums1[i] = nums1[c1]
+            c1 -= 1
+        else:
+            nums1[i] = nums2[c2]
+            c2 -= 1
+        if c2 == -1:
+            return
+        if c1 == -1:
+            nums1[:i] = nums2[:c2]
+            return
+
+
+class TreeNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+
+def pre_order(root):
+    result = [root]
+    if root.left:
+        result.extend(pre_order(root.left))
+    if root.right:
+        result.extend(pre_order(root.right))
+    return result
+
+
+def lowest_common_ancestor_bt(root, p, q):
+    path_to_root = []
+    pre = pre_order(root)
+    root_to_p = [p]
+    pind = pre.index(p)
+    for i in range(pind-1, -1, -1):
+        if pre[i].left == p or pre[i].right == p:
+            root_to_p.append(pre[i])
+            p = pre[i]
+    root_to_p.reverse()
+    root_to_q = [q]
+    qind = pre.index(q)
+    for i in range(qind-1, -1, -1):
+        if pre[i].left == q or pre[i].right == q:
+            root_to_q.append(pre[i])
+            q = pre[i]
+    root_to_q.reverse()
+    prev = root
+    for p, q in zip(root_to_p, root_to_q):
+        if p != q:
+            return prev
+        prev = p
+    return prev
+
+
+def lowest_common_ancestor_bst(root, p, q):
+    if p == root or q == root:
+        return root
+    if (p.val < root.val) != (q.val < root.val):
+        return root
+    if p.val < root.val:
+            root = root.left
+    else:
+        root = root.right
+    return lowest_common_ancestor_bst(root, p, q)
+
+
+def sqrt(x):
+    # very shitty but I am tired, I should do this with binary
+    if not x:
+        return 0
+    if x < 4:
+        return 1
+    if x < 9:
+        return 2
+    if x < 16:
+        return 3
+    digits = len(str(x))
+    top = 10 ** (digits // 2)
+    top = top * 3.5 if digits % 2 else top
+    bottom = top // 3.5
+    med = (bottom + top) // 2
+    while bottom < top:
+        if med * med == x:
+            return int(med)
+        if med * med < x:
+            bottom = med
+        else:
+            top = med
+        if med == (bottom + top) // 2:
+            return int(med)
+        med = (bottom + top) // 2
+
+
+def convert_to_title(n):
+    let_map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    digits = []
+    while n > 0:
+        rem = n % 26
+        if rem == 0:
+            rem = 26
+            n -= 26
+        digits.append(rem)
+        n = n // 26
+    digits.reverse()
+    return ''.join([let_map[x-1] for x in digits])
+
+
+def isBadVersion(n):
+    return True
+
+
+def firstBadVersion(self, n):
+    """
+    :type n: int
+    :rtype: int
+    """
+    if n == 1:
+        return 1
+    first = 0
+    last = n - 1
+    med = (first + last) // 2
+    while first < last:
+        if isBadVersion(med + 1):
+            if med == 0:
+                return 1
+            if not isBadVersion(med):
+                return med + 1
+            last = med
+        else:
+            if first == med:
+                first += 1
+            else:
+                first = med
+        med = (first + last) // 2
+    return med + 1
+
+
+def repeated_string_match(A, B):
+    rep = len(B) // len(A)
+    for i in range(rep, rep + 3):
+        if B in i * A:
+            return i
+    return -1
+
+
+def get_repeated_perms(nums, length):
+    result = {str(num) for num in nums}
+    for i in range(length - 1):
+        temp = set()
+        for num in nums:
+            for s in result:
+                temp.add(s + str(num))
+        result = temp
+    return result
+
+
+def is_valid(time):
+    if int(time[0]) > 2:
+        return False
+    if int(time[0]) == 2 and int(time[1]) > 3:
+        return False
+    if int(time[3]) > 5:
+        return False
+    return True
+
+
+def next_closest_time(time):
+    nums = {int(x) for x in time if x.isdigit()}
+    if len(nums) == 1:
+        return time
+    perms = get_repeated_perms(nums, 4)
+    valid_perms = {x for x in perms if is_valid(str(x)[:2] + ':' + str(x)[2:])}
+    perms_int = {int(perm) for perm in valid_perms}
+    simple_time_int = int(time[:2] + time[3:])
+    min_diff = 10000
+    min_t = 0
+    for perm in perms_int:
+        if perm < simple_time_int:
+            perm += 2400
+        diff = perm - simple_time_int
+        if diff < min_diff and diff != 0:
+            min_diff = diff
+            min_t = perm if perm < 2400 else perm - 2400
+    min_t = str(min_t)
+    if len(min_t) == 3:
+        min_t = '0' + min_t
+    if len(min_t) == 2:
+        min_t = '00' + min_t
+    if len(min_t) == 1:
+        min_t = '000' + min_t
+    if len(min_t) == 0:
+        min_t = '0000'
+    return min_t[:2] + ':' + min_t[2:]
+    # this became horrible but don't have time to go back to clean up
