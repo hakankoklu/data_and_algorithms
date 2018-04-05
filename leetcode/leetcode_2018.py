@@ -852,6 +852,15 @@ def pre_order(root):
     return result
 
 
+def get_root_path(pre, node):
+    path = [node]
+    ind = pre.index(node)
+    for i in range(ind-1, -1, -1):
+        if pre[i].left == node or pre[i].right == node:
+            path.append(pre[i])
+            node = pre[i]
+    return path
+
 def lowest_common_ancestor_bt(root, p, q):
     path_to_root = []
     pre = pre_order(root)
@@ -1017,3 +1026,61 @@ def next_closest_time(time):
         min_t = '0000'
     return min_t[:2] + ':' + min_t[2:]
     # this became horrible but don't have time to go back to clean up
+
+
+def longest_univalue_path(root):
+    if not root:
+        return 0
+    nodes = pre_order(root)
+    uni_pairs = get_uni_pairs(nodes)
+    uni_pair_paths = [get_path(nodes, *pair) for pair in uni_pairs]
+    min_len = 1
+    for path in uni_pair_paths:
+        if is_uni_path(path) and len(path) > min_len:
+            min_len = len(path)
+    return min_len - 1
+
+
+def get_all_nodes(root):
+    s = [root]
+    nodes = []
+    while s:
+        node = s.pop()
+        nodes.append(node)
+        if node.left:
+            s.append(node.left)
+        if node.right:
+            s.append(node.right)
+    return nodes
+
+
+def get_uni_pairs(nodes):
+    pairs = []
+    for i in range(len(nodes)):
+        for j in range(i + 1, len(nodes)):
+            pairs.append((nodes[i], nodes[j]))
+    return pairs
+
+
+def get_path(pre, f, s):
+    f_root_path = get_root_path(pre, f)
+    s_root_path = get_root_path(pre, s)
+    f_root_path.reverse()
+    s_root_path.reverse()
+    com = pre[0]
+    for i, j in zip(f_root_path, s_root_path):
+        if i == j:
+            com = i
+    f_root_path.reverse()
+    f_com_path = f_root_path[:f_root_path.index(com)]
+    s_root_path.reverse()
+    s_com_path = s_root_path[:s_root_path.index(com)]
+    s_com_path.reverse()
+    return f_com_path + [com] + s_com_path
+
+
+def is_uni_path(path):
+    s = {node.val for node in path}
+    if len(s) > 1:
+        return False
+    return True

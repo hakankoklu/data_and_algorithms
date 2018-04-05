@@ -124,3 +124,21 @@ def test_convert_to_title(n, res):
     ])
 def test_is_valid(time, result):
     assert is_valid(time) == result
+
+
+def test_get_root_path():
+    r = TreeNode(1)
+    pre = pre_order(r)
+    assert get_root_path(pre, r) == [r]
+    rl = TreeNode(2)
+    rr = TreeNode(3)
+    r.left = rl
+    r.right = rr
+    pre = pre_order(r)
+    assert get_root_path(pre, rl) == [rl, r]
+    assert get_path(pre, r, rl) == [r, rl] or get_path(pre, r, rl) == [rl, r]
+    assert get_path(pre, rr, rl) == [rr, r, rl] or get_path(pre, rr, rl) == [rl, r, rr]
+    rll = TreeNode(4)
+    rl.left = rll
+    pre = pre_order(r)
+    assert get_root_path(pre, rll) == [rll, rl, r]
