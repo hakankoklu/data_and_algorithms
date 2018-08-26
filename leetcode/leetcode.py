@@ -86,13 +86,13 @@ def diagonal_print(word_list):
         for row, word in enumerate(word_list):
             if row + ind < len(word):
                 word_to_print += word[row + ind]
-        print word_to_print
+        print(word_to_print)
     for row, word in enumerate(word_list[1:]):
         word_to_print = ''
         for ind, let in enumerate(word_list[-1][:-1]):
             if row + ind < len(word):
                 word_to_print += word[row + ind]
-        print word_to_print
+        print(word_to_print)
 
 words = ['abcde', 'fgh', 'ijk']
 diagonal_print(words)
