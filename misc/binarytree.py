@@ -1,4 +1,4 @@
-from queue import Queue
+from misc.queue import Queue
 
 class BinaryTree():
 

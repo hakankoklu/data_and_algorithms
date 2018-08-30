@@ -1,5 +1,5 @@
-from binarytree import BinaryTree
-from stack import Stack
+from misc.binarytree import BinaryTree
+from misc.stack import Stack
 
 def serialize(some_tree):
     result = []

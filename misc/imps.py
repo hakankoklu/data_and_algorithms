@@ -1,6 +1,6 @@
-from stack import Stack
-from queue import Queue
-from binarytree import BinaryTree
+from misc.stack import Stack
+from misc.queue import Queue
+from misc.binarytree import BinaryTree
 
 def par_checker(text):
     par_stack = Stack()
