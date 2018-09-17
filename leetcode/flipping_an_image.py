@@ -31,3 +31,6 @@ class Solution(object):
             for ind, cell in enumerate(row):
                 row[ind] = cell ^ 1
         return img
+
+
+print(Solution().flip_and_invert_image([[1,1,1,0,0]]))
