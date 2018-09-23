@@ -10,6 +10,7 @@ class ListNode:
         self.prev = None
         self.next = None
 
+
 class LRUCache:
 
     def __init__(self, max_size):
@@ -19,7 +20,7 @@ class LRUCache:
         self.least_recent = None
         self.most_recent = None
 
-    def add(self, key, value):
+    def put(self, key, value):
 
         if self.current_size == 0:
             node = ListNode(key, value)
@@ -55,31 +56,25 @@ class LRUCache:
 
     def make_most_recent(self, key):
         node = self.cache[key]
-        node.prev.next = node.next
-        node.next.prev = node.prev
+        if node == self.most_recent:
+            return
+        elif node == self.least_recent:
+            node.prev.next = node.next
+        else:
+            node.prev.next = node.next
+            node.next.prev = node.prev
         self.most_recent.prev = node
         node.next = self.most_recent
         node.prev = None
         self.most_recent = node
 
 
-l = LRUCache(5)
-print(l.most_recent, l.least_recent)
-l.add(1, 11)
-print(l.most_recent.key, l.least_recent.key)
-l.add(2, 12)
-print(l.most_recent.key, l.least_recent.key)
-l.add(3, 13)
-print(l.most_recent.key, l.least_recent.key)
-l.add(4, 14)
-print(l.most_recent.key, l.least_recent.key)
-l.add(5, 15)
-print(l.most_recent.key, l.least_recent.key)
-l.get(2)
-print(l.most_recent.key, l.least_recent.key)
-l.add(6, 16)
-print(l.most_recent.key, l.least_recent.key)
-l.get(5)
-print(l.most_recent.key, l.least_recent.key)
-l.add(7, 17)
-print(l.cache, l.most_recent.key, l.least_recent.key)
+if __name__ == '__main__':
+    aa = ["LRUCache","put","put","get","put","get","put","get","get","get"]
+    bb = [[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]
+    c = LRUCache(2)
+    for b in bb:
+        if len(b) == 1:
+            c.get(*b)
+        else:
+            c.put(*b)
