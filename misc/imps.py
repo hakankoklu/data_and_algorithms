@@ -1,5 +1,5 @@
 from misc.stack import Stack
-from misc.queue import Queue
+from misc.my_queue import Queue
 from misc.binarytree import BinaryTree
 
 def par_checker(text):

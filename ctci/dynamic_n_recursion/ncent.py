@@ -1,6 +1,7 @@
 """Given an infinite number of quarters, dimes, nickels and pennies, write code to calculate the number of ways of
 representing n cents."""
 
+
 def change_ways(n):
     ways = [set([(0, 0, 0, 0)])]
     coins = [1, 5, 10, 25]
@@ -20,6 +21,7 @@ def change_ways(n):
                 new_ways.add(sub_tp)
     print(ways[n])
     return len(ways[n])
+
 
 change = int(input())
 print(change_ways(change))

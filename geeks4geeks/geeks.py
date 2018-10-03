@@ -58,5 +58,33 @@ def find_distinct_nums(arr):
 #         print(*result, sep=' ')
 
 
+def check_string_pattern(s, p):
+    current = prev = p[0]
+    current_ind = 0
+    not_ok = set(p)
+    not_ok.remove(current)
+    for t in s:
+        if t == current:
+            prev = current
+            if current_ind + 1 < len(p):
+                current_ind += 1
+                current = p[current_ind]
+            not_ok = set(p)
+            not_ok.remove(current)
+            if prev in not_ok:
+                not_ok.remove(prev)
+        elif t in not_ok:
+            return False
+    return True
+
+
+def main():
+    tests = [("engineers rock", "er"),
+             ("engineers rock", "egr"),
+             ("engineers rock", "gsr")]
+    for s, p in tests:
+        print(check_string_pattern(s, p))
+
+
 if __name__ == '__main__':
     main()
