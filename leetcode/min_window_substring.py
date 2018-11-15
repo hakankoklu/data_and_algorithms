@@ -14,6 +14,7 @@ If there is such window, you are guaranteed that there will always be only one u
 3, 9
 5, 12
 """
+from collections import defaultdict
 
 
 class Solution:
@@ -44,7 +45,46 @@ class Solution:
             return ''
         return s[min_max[0]:min_max[1] + 1]
 
+    def minWindow2(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        letter_count = defaultdict(int)
+        letter_set = set(t)
+        for letter in t:
+            letter_count[letter] += 1
+        left = right = 0
+        if s[0] in letter_set:
+            letter_count[s[0]] -= 1
+        min_win = s
+        current_window = s[0]
+        found = False
+        while right < len(s):
+            if self.check_found(letter_count):
+                found = True
+                if len(current_window) < len(min_win):
+                    min_win = current_window
+                if s[left] in letter_set:
+                    letter_count[s[left]] += 1
+                left += 1
+                current_window = current_window[1:]
+            else:
+                right += 1
+                if right < len(s):
+                    if s[right] in letter_set:
+                        letter_count[s[right]] -= 1
+                    current_window = current_window + s[right]
+        if found:
+            return min_win
+        else:
+            return ""
+
+    def check_found(self, d):
+        return all([value <= 0 for value in d.values()])
+
 
 if __name__ == '__main__':
     s = Solution()
-    print(s.minWindow("ADOBECODEBANC", "ABC"))
+    print(s.minWindow2("A", "AA"))

@@ -48,43 +48,32 @@ class Solution:
     def _asteroid_collusion(self, arr):
         if len(arr) <= 1:
             return arr
-        change = True
-        while change:
-            change = False
-            result = [arr[0]]
-            popped = False
-            for ind, ast in enumerate(arr[1:], 1):
-                if popped:
-                    popped = False
-                    continue
-                current = result[-1]
-                if not self.is_collusion(current, ast):
+        result = []
+        for ast in arr:
+            if ast > 0:
+                result.append(ast)
+            else:
+                if not result or result[-1] < 0:
                     result.append(ast)
                 else:
-                    col_res = self.collide(current, ast)
-                    if col_res:
-                        change = True
-                        result[-1] = col_res
-                    else:
-                        result.pop()
-                        popped = True
-                        if ind + 1 < len(arr):
-                            result.append(arr[ind + 1])
-            arr = result[:]
-        return arr
+                    result = self.propagate_left_ast(result, ast)
+        return result
 
-    def is_collusion(self, one, two):
-        if one > 0 and two < 0:
-            return True
-        return False
-
-    def collide(self, one, two):
-        diff = one + two
-        if diff > 0:
-            return one
-        elif diff < 0:
-            return two
-        return None
+    def propagate_left_ast(self, arr, ast):
+        while True:
+            if not arr:
+                return [ast]
+            elif arr[-1] < 0:
+                arr.append(ast)
+                return arr
+            else:
+                if abs(arr[-1]) > abs(ast):
+                    return arr
+                elif abs(arr[-1]) == abs(ast):
+                    arr.pop()
+                    return arr
+                else:
+                    arr.pop()
 
 
 if __name__ == '__main__':
